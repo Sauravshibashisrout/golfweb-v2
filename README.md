@@ -1,30 +1,34 @@
 # GolfGives — Golf Charity Platform
 
-GolfGives is a subscription-based golf charity platform where members pay a monthly or annual fee, log their Stableford scores, and a portion of every payment is automatically allocated to their chosen charity. The platform includes a draw engine for optional cash-prize competitions (jurisdiction-gated), admin tooling for charity management and winner verification, and Razorpay-powered payments with Supabase as the backend.
+GolfGives is a subscription-based golf charity platform where members pay a monthly (₹599) or annual (₹5,999) fee, log real Stableford scores from golf courses, and a portion of every payment is automatically allocated to their chosen charity. The platform includes a score-based monthly reward draw engine (jurisdiction-gated sandbox by default), admin tooling for charity management, winner verification, and payout recording, with Stripe-powered subscriptions and Supabase as the backend.
 
 ## Tech Stack
 
-- **Next.js 15** (App Router, TypeScript)
-- **Supabase** (Postgres, Auth, Storage, Edge Functions)
-- **Razorpay** (primary payment provider, India-first)
-- **Stripe** (optional secondary provider)
-- **Tailwind CSS**
+- **Next.js 16** (App Router, TypeScript, `src/` layout)
+- **Supabase** (Postgres, Auth, Storage, Edge Functions, Row Level Security)
+- **Stripe** (subscriptions, Customer Portal, direct donations via Checkout)
+- **Razorpay** (optional India-first provider — abstracted behind payment provider layer)
+- **Tailwind CSS v4**
 
 ## Required Environment Variables
 
-Create `.env.local` at the repo root with the following keys (never commit values):
+Create `.env.local` at the repo root (copy from `.env.local.example`). Never commit values.
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-RAZORPAY_KEY_ID=
-RAZORPAY_KEY_SECRET=
-RAZORPAY_WEBHOOK_SECRET=
-NEXT_PUBLIC_RAZORPAY_KEY_ID=
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+STRIPE_PRICE_MONTHLY
+STRIPE_PRICE_ANNUAL
+
+NEXT_PUBLIC_RAZORPAY_KEY_ID
+RAZORPAY_KEY_SECRET
+RAZORPAY_WEBHOOK_SECRET
 ```
 
 ## Local Setup
@@ -35,13 +39,21 @@ npm install
 
 # 2. Copy and fill in environment variables
 cp .env.local.example .env.local
-# Edit .env.local with your Supabase and Razorpay credentials
+# Edit .env.local with your Supabase and Stripe credentials
 
 # 3. Start the dev server
 npm run dev
 ```
 
 App runs at [http://localhost:3000](http://localhost:3000).
+
+## Database Migrations
+
+SQL migrations live in `supabase/migrations/`. Apply them in order via the Supabase dashboard SQL editor or CLI:
+
+```bash
+supabase db push
+```
 
 ## Supabase Edge Functions
 
@@ -51,32 +63,32 @@ Functions live in `supabase/functions/`. Deploy with:
 supabase functions deploy <function-name>
 ```
 
-Set secrets on the Supabase project with:
+Set secrets on the Supabase project:
 
 ```bash
-supabase secrets set RAZORPAY_KEY_ID=... RAZORPAY_KEY_SECRET=... RAZORPAY_WEBHOOK_SECRET=...
+supabase secrets set STRIPE_SECRET_KEY=... STRIPE_WEBHOOK_SECRET=...
 ```
 
 ## Cash Prize Draw
 
-`cashPrizeDrawEnabled` defaults to `false` in `app_settings`. This flag **must not be set to `true`** without recorded approval confirming the jurisdiction permits cash-prize competitions. Update it only via a reviewed database migration or admin action with documented legal sign-off.
+`cashPrizeDrawEnabled` defaults to `false` in `app_settings`. This flag **must not be set to `true`** without recorded legal approval confirming the jurisdiction permits cash-prize competitions. The draw engine runs in sandbox/demo mode until this is explicitly enabled via a reviewed admin action with a `legal_approval_ref` recorded on the draw record.
 
 ## Project Structure
 
 ```
 repo-root/
 ├── src/
-│   ├── app/          # Next.js App Router pages and API routes
-│   ├── components/   # React components
-│   ├── lib/          # Supabase clients, Razorpay helpers, RBAC
-│   └── types/        # Database types
+│   ├── app/          # Next.js App Router — pages, layouts, API routes
+│   ├── components/   # React components (ui/, draw/, scores/, charity/)
+│   ├── lib/          # Supabase clients, RBAC helpers
+│   └── types/        # Generated Supabase database types
 ├── public/           # Static assets
 ├── scripts/          # Dev/test utility scripts
+├── supabase/
+│   ├── functions/    # Edge Functions (Deno) — payments, draw, admin ops
+│   └── migrations/   # SQL migrations (additive only)
 ├── package.json
 ├── next.config.ts
 ├── tsconfig.json
-├── .env.local.example
-└── supabase/
-    ├── functions/    # Edge Functions (Deno)
-    └── migrations/   # SQL migrations
+└── .env.local.example
 ```
