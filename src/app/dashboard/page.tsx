@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server'
 import { Trophy, Heart, ArrowRight, ShieldCheck, Clock, CheckCircle2, History, AlertCircle, Receipt, ExternalLink } from 'lucide-react'
 import SandboxBanner from '@/components/draw/SandboxBanner'
 import ScoreManager from '@/components/dashboard/ScoreManager'
-import StripePortalButton from '@/components/dashboard/StripePortalButton'
 import DrawCountdown from '@/components/dashboard/DrawCountdown'
 import WinningsSection from '@/components/dashboard/WinningsSection'
 
@@ -319,7 +318,7 @@ export default async function DashboardPage({
       {/* Transparent Sandbox Banner when disabled */}
       {!cashEnabled && <SandboxBanner />}
 
-      {/* ── Section 1: Membership & Stripe Billing ──────────────────────────── */}
+      {/* ── Section 1: Membership & Billing ──────────────────────────── */}
       <div className="glass rounded-3xl p-6 sm:p-8 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -365,9 +364,6 @@ export default async function DashboardPage({
           </div>
 
           <div className="flex items-center gap-3">
-            {sub?.provider === 'stripe' && (
-              <StripePortalButton />
-            )}
             <Link
               href="/pricing"
               className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold text-xs transition-colors"
