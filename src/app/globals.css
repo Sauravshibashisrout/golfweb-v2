@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --green: #4ade80;
+  --green-dim: #166534;
+  --gold: #fbbf24;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --surface-3: #242424;
+  --border: rgba(255,255,255,0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  background: var(--surface);
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, #4ade80 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card glass effect */
+.glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}

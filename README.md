@@ -12,7 +12,7 @@ GolfGives is a subscription-based golf charity platform where members pay a mont
 
 ## Required Environment Variables
 
-Create `app/.env.local` with the following keys (never commit values):
+Create `.env.local` at the repo root with the following keys (never commit values):
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
@@ -31,7 +31,6 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 
 ```bash
 # 1. Install dependencies
-cd app
 npm install
 
 # 2. Copy and fill in environment variables
@@ -65,15 +64,19 @@ supabase secrets set RAZORPAY_KEY_ID=... RAZORPAY_KEY_SECRET=... RAZORPAY_WEBHOO
 ## Project Structure
 
 ```
-golf web/
-├── app/          # Next.js application (App Router)
-│   ├── src/
-│   │   ├── app/          # Pages and API routes
-│   │   ├── components/   # React components
-│   │   ├── lib/          # Supabase clients, Razorpay helpers, RBAC
-│   │   └── types/        # Database types
-│   └── scripts/          # Dev/test utility scripts
+repo-root/
+├── src/
+│   ├── app/          # Next.js App Router pages and API routes
+│   ├── components/   # React components
+│   ├── lib/          # Supabase clients, Razorpay helpers, RBAC
+│   └── types/        # Database types
+├── public/           # Static assets
+├── scripts/          # Dev/test utility scripts
+├── package.json
+├── next.config.ts
+├── tsconfig.json
+├── .env.local.example
 └── supabase/
-    ├── functions/        # Edge Functions (Deno)
-    └── migrations/       # SQL migrations
+    ├── functions/    # Edge Functions (Deno)
+    └── migrations/   # SQL migrations
 ```
