@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+app/.next/
+app/out/
+
+# Environment — never commit secrets
+.env
+.env.local
+.env.*.local
+app/.env
+app/.env.local
+app/.env.*.local
+
+# Supabase local state
+supabase/.temp/
+
+# Build outputs
+app/tsconfig.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
