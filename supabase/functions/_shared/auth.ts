@@ -32,8 +32,7 @@ export async function requireAuth(req: Request): Promise<AuthContext> {
   const db = adminClient()
 
   const isServiceCall =
-    (serviceKey && (jwt === serviceKey || apikey === serviceKey)) ||
-    jwt === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqendqeXNvYXN6eGNqanN0eGxuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTg3MTQ1MiwiZXhwIjoyMTA1NDQ3NDUyfQ.-Q-4zj_9Rb7hKOYGdolflvVcBAcmF968o0yqpVoy1n8'
+    serviceKey.length > 0 && (jwt === serviceKey || apikey === serviceKey)
 
   // Allow service_role key directly for system/admin calls
   if (isServiceCall) {

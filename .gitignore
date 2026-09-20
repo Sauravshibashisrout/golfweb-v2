@@ -4,6 +4,7 @@ node_modules/
 .pnp.js
 
 # Next.js
+.next/
 app/.next/
 app/out/
 
@@ -17,6 +18,9 @@ app/.env.*.local
 
 # Supabase local state
 supabase/.temp/
+
+# Vercel
+.vercel
 
 # Build outputs
 app/tsconfig.tsbuildinfo
